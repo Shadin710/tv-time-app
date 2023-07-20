@@ -71,6 +71,29 @@ class AdminController extends Controller
 
         return response()->json($categories,200);
     }
+    public function updateCategory(Request $request,$id)
+    {
+        $data=[
+            'name'=>$request->name
+        ];
+
+        $categories = Category::where('id',$id)->update($data);
+        return response()->json(['message'=>'Category has been updated Successfully']);
+    }
+    public function deleteCatgory(Request $request,$id)
+    {
+        $categories = Category::find($id);
+
+        if($categories)
+        {
+            $categories->delete();
+            return response()->json(['message'=>'Category Deleted Successfull with the movies that is associated wih it'],200);
+        }
+        else
+        {
+            return response()->json(['message'=>'Document not found'],404);
+        }
+    }
     public function getUsers(Request $request)
     {
         if(Cache::has('users'))
@@ -118,7 +141,7 @@ class AdminController extends Controller
         return response()->json(['message'=>'Successfully Addded'],200);
     }
 
-    public function editShows(Request $request,$id)
+    public function updateShows(Request $request,$id)
     {
         $data = [
             'category_id'       =>  $request->category_id,
@@ -140,6 +163,18 @@ class AdminController extends Controller
     }
     public function deleteShows(Request $request,$id)
     {
+        $shows =Show::find($id);
+
+        if($shows)
+        {
+            $shows->delete();
+
+            return response()->json(['message'=>'Show has been deleted successfully'],200);
+        }
+        else{
+            return response()->json(['message'=>'Show not found'],404);
+        }
+
     }
 
 
