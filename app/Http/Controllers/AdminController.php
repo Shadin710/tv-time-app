@@ -43,14 +43,21 @@ class AdminController extends Controller
 
         return response()->json($data,200);
     }
-    public function createCategory(Request $request)
+    public function addCategory(Request $request)
     {
         $categories =Category::create([
             'name'=>$request->name,
         ]);
+
+        // add new categories so we need to clear the cache so that our website can show fresh data
+        if(Cache::has('categories'))
+        {
+            Cache::forget('categories');
+        }
+
         return response()->json(["message"=>'Category Created Successfully'],200);
     }
-    
+
     public function getCategory(Request $request)
     {
         if(Cache::has('categories'))
@@ -64,6 +71,78 @@ class AdminController extends Controller
 
         return response()->json($categories,200);
     }
+    public function getUsers(Request $request)
+    {
+        if(Cache::has('users'))
+        {
+            $users = Cache::get('users');
+        }
+        else
+        {
+            $users = User::all();
+            Cache::put('users',$users);
+        }
+        return response()->json($users,200);
+
+    }
+    public function getShows(Request $request)
+    {
+        if(Cache::has('shows'))
+        {
+            $shows = Cache::get('shows');
+        }
+        else
+        {
+            $shows = Show::all();
+            Cache::put('shows',$shows);
+        }
+        return response()->json($shows,200);
+    }
+    public function addShows(Request $request)
+    {
+        $shows =Show::create([
+            'category_id'       =>  $request->category_id,
+            'genre'             =>  $request->genre,
+            'name'              =>  $request->name,
+            'duration'          =>  $request->duration,
+            'country'           =>  $request->country,
+            'release_date'      =>  $request->release_date,
+            'longText'          =>  $request->longText,
+            'seasons'           =>  $request->seasons,
+            'url'               =>  $request->url,
+            'poster'            =>  $request->poster,
+            'imdb_rating'       =>  $request->imdb_rating,
+            'rotten_tomatoes'   =>  $request->rotten_tomatoes
+        ]);
+
+        return response()->json(['message'=>'Successfully Addded'],200);
+    }
+
+    public function editShows(Request $request,$id)
+    {
+        $data = [
+            'category_id'       =>  $request->category_id,
+            'genre'             =>  $request->genre,
+            'name'              =>  $request->name,
+            'duration'          =>  $request->duration,
+            'country'           =>  $request->country,
+            'release_date'      =>  $request->release_date,
+            'longText'          =>  $request->longText,
+            'seasons'           =>  $request->seasons,
+            'url'               =>  $request->url,
+            'poster'            =>  $request->poster,
+            'imdb_rating'       =>  $request->imdb_rating,
+            'rotten_tomatoes'   =>  $request->rotten_tomatoes
+        ];
+        $shows =Show::where('id',$id)->update($data);
+
+        return response()->json(['message'=>'Successfully Updated the show'],200);
+    }
+    public function deleteShows(Request $request,$id)
+    {
+    }
+
+
 
 
 }
