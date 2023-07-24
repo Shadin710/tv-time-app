@@ -13,5 +13,10 @@ class Category extends Model
         'type'
     ];
 
+    public function shows()
+    {
+        return $this->hasMany(Show::class);
+    }
+
     
 }

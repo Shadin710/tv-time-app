@@ -28,5 +28,9 @@ class Show extends Model
     {
         return $this->belongsTo(TvTime::class);
     }
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
     
 }
