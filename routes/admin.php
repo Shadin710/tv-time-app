@@ -30,6 +30,8 @@ Route::controller(AdminController::class)->group(function(){
 
     //User Process
     Route::get('/users','getUsers')->name('users');
+    Route::get('/users/{id}','userDetails')->name('user-details');
+    Route::delete('/users/{id}','deleteUsers')->name('delete-user');
 
 
 });

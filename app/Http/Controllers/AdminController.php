@@ -55,7 +55,7 @@ class AdminController extends Controller
             Cache::forget('categories');
         }
 
-        return response()->json(["message"=>'Category Created Successfully'],200);
+        return response()->json(["message"=>'Category Created Successfully'],201);
     }
 
     public function getCategory(Request $request)
@@ -87,7 +87,7 @@ class AdminController extends Controller
         if($categories)
         {
             $categories->delete();
-            return response()->json(['message'=>'Category Deleted Successfull with the movies that is associated wih it'],200);
+            return response()->json(['message'=>'Category Deleted Successfull with the movies that is associated wih it'],204);
         }
         else
         {
@@ -108,6 +108,38 @@ class AdminController extends Controller
         return response()->json($users,200);
 
     }
+    public function deleteUsers(Request $request,$id)
+    {
+        $user= User::find($id);
+
+        if($user)
+        {
+            $user->delete();
+            if(Cache::has('users'))
+            {
+                Cache::forget('users');
+            }
+            return response()->json(['message'=>'Show has been deleted successfully'],204);
+        }
+        else
+        {
+            return response()->json(['message'=>'Not found'],404);
+        }
+
+    }
+
+    public function userDetails(Request $request,$id)
+    {
+        $user = User::find($id);
+        if($user)
+        {
+            return response()->json($user,200);
+        }
+        else
+        {
+            return response()->json(['message'=>"Not Found"],404);
+        }
+    }
     public function getShows(Request $request)
     {
         if(Cache::has('shows'))
@@ -123,7 +155,7 @@ class AdminController extends Controller
     }
     public function addShows(Request $request)
     {
-        $shows =Show::create([
+        $data = [
             'category_id'       =>  $request->category_id,
             'genre'             =>  $request->genre,
             'name'              =>  $request->name,
@@ -136,9 +168,14 @@ class AdminController extends Controller
             'poster'            =>  $request->poster,
             'imdb_rating'       =>  $request->imdb_rating,
             'rotten_tomatoes'   =>  $request->rotten_tomatoes
-        ]);
+        ];
+        $shows =Show::create($data);
 
-        return response()->json(['message'=>'Successfully Addded'],200);
+        if(Cache::has('shows'))
+        {
+            Cache::forget('shows');
+        }
+        return response()->json(['message'=>'Successfully Addded'],201);
     }
 
     public function updateShows(Request $request,$id)
@@ -158,7 +195,10 @@ class AdminController extends Controller
             'rotten_tomatoes'   =>  $request->rotten_tomatoes
         ];
         $shows =Show::where('id',$id)->update($data);
-
+        if(Cache::has('shows'))
+        {
+            Cache::forget('shows');
+        }
         return response()->json(['message'=>'Successfully Updated the show'],200);
     }
     public function deleteShows(Request $request,$id)
@@ -168,8 +208,11 @@ class AdminController extends Controller
         if($shows)
         {
             $shows->delete();
-
-            return response()->json(['message'=>'Show has been deleted successfully'],200);
+            if(Cache::has('shows'))
+            {
+                Cache::forget('shows');
+            }
+            return response()->json(['message'=>'Show has been deleted successfully'],204);
         }
         else{
             return response()->json(['message'=>'Show not found'],404);
