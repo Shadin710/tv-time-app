@@ -22,5 +22,11 @@ class Show extends Model
         'imdb_rating',
         'rotten_tomatoes'
     ];
+
+
+    public function tvtime()
+    {
+        return $this->belongsTo(TvTime::class);
+    }
     
 }

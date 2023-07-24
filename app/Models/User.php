@@ -42,12 +42,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-    public function userType()
+    public function usertype()
     {
         return $this->belongsTo(UserType::class);
     }
-    public function TvTime()
+    public function tvtime()
     {
         return $this->hasMany(TvTime::class);
     }
+
 }
