@@ -54,13 +54,14 @@ class HomeController extends Controller
         return response()->json(['message'=>'Not Found'],404);
     }
 
+    // needs to be fixed
     public function filter(Request $request)
     {
         
         if(Cache::has('categories'))
         {
             $categories = Cache::get('categories');
-            $shows = $categories->shows->get();
+            $shows = $categories->where('id',$request->id)->shows->get();
         }
         else
         {
