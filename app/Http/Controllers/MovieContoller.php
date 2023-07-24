@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\TvTime;
 
 class MovieContoller extends Controller
 {
@@ -11,7 +13,6 @@ class MovieContoller extends Controller
     //index will get every movie that an user has watched or he/she is watching right now
     public function index(Request $request)
     {
-
     }
 
     //will get every popular movies based on user rating in the website
