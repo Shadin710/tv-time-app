@@ -30,12 +30,12 @@ class HomeController extends Controller
         $genre = Cache::remember('genre',now()->addMinutes(300),function(){
             return Genre::all();
         });
-
+        
         $data =[
             'shows'         =>  $shows,
             'latest_shows'  =>  $latest_shows,
             'categories'    =>  $categories,
-            'genre'         =>  $genre
+            'genre'         =>  $genre,
         ];
         return response()->json($data,200);
     }
@@ -57,6 +57,18 @@ class HomeController extends Controller
     public function filter(Request $request)
     {
         
+        if(Cache::has('categories'))
+        {
+            $categories = Cache::get('categories');
+            $shows = $categories->shows->get();
+        }
+        else
+        {
+            // needs to be modified for filtered search
+            $shows = Category::with('shows')->get();
+        }
+        return response()->json($shows,200);
+
     }
 
 
