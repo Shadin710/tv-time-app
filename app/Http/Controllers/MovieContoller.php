@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\TvTime;
+use App\Models\User;
 
 class MovieContoller extends Controller
 {
@@ -13,8 +14,15 @@ class MovieContoller extends Controller
     //index will get every movie that an user has watched or he/she is watching right now
     public function index(Request $request)
     {
-    }
+        $tvtime = User::with('tvtime')->where('id',Auth::user()->id);
 
+        $data = [
+            'tvtime'    =>  $tvtime,
+            'shows'     => $tvtime->show
+        ];
+        return response()->json($data,200);
+
+    }
     //will get every popular movies based on user rating in the website
     public function popularShows(Request $request)
     {
