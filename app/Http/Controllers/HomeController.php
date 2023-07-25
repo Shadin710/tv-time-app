@@ -12,6 +12,7 @@ use App\Models\UserType;
 use App\Models\TvTime;
 use App\Models\Show;
 use Illuminate\Support\Facades\Cache;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 class HomeController extends Controller
 {
@@ -69,10 +70,17 @@ class HomeController extends Controller
             $shows = Category::with('shows')->get();
         }
         return response()->json($shows,200);
-
     }
 
+    public function showsDetailts(Request $request,$id)
+    {
+        $shows = Show::find($id);
 
-
+        if($shows)
+        {
+            return response()->json($shows,200);
+        }
+        return response()->json(['message'=>'Not Found'],404);
+    }
 
 }
