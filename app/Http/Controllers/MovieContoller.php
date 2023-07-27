@@ -26,7 +26,7 @@ class MovieContoller extends Controller
     //will get every popular movies based on user rating in the website
     public function popularShows(Request $request)
     {
-
+        
     }
 
     //adds users liked movies
